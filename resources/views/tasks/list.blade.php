@@ -51,7 +51,8 @@
                                             @endif
                                         </span>
 
-                                        @if ($task->owner->id == auth()->user()->getAuthIdentifier())
+                                        @if ($task->owner_id == auth()->user()->getAuthIdentifier()
+                                            || $task->target_id == auth()->user()->getAuthIdentifier())
                                             <x-link-button :href="route('tasks.edit', $task)">
                                                 {{ __('Edit') }}
                                             </x-link-button>

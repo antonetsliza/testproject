@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -65,7 +66,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        Gate::authorize('update', $task);
+        //Gate::authorize('update', $task);
 
         $users = User::query()->select('id', 'name')
             ->whereNot('id', Auth::user()->getAuthIdentifier())->get();
@@ -88,7 +89,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        Gate::authorize('update', $task);
+        //Gate::authorize('update', $task);
 
         $validated = $request->validated();
         if(!$validated['target_id'])

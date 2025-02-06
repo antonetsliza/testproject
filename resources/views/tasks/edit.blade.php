@@ -38,6 +38,13 @@
                 @endforeach
             </select>
 
+            <select id="status" name="status"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mb-4">
+                @foreach($statuses as $key => $status)
+                    <option value="{{$key}}" @if($key == $task->status) selected @endif>{{$status}}</option>
+                @endforeach
+            </select>
+
             <x-primary-button class="mt-4 bg-indigo-600">{{ __('Edit') }}</x-primary-button>
         </form>
     </div>

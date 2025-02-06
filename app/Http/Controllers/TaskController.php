@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -69,9 +70,16 @@ class TaskController extends Controller
         $users = User::query()->select('id', 'name')
             ->whereNot('id', Auth::user()->getAuthIdentifier())->get();
 
+        $statuses = [
+            TaskStatus::PENDING => 'pending',
+            TaskStatus::IN_PROGRESS => 'in progress',
+            TaskStatus::COMPLETED => 'completed'
+        ];
+
         return view('tasks.edit', [
             'task' => $task,
-            'users' => $users
+            'users' => $users,
+            'statuses' => $statuses
         ]);
     }
 

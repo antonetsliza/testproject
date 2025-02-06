@@ -75,6 +75,8 @@
                                         <span class="text-gray-800">{{ $task->title }}</span><br>
                                         <b>Description:</b><br>
                                         <span class="text-gray-800">{{ $task->description }}</span><br>
+                                        <b>Status:</b>
+                                        <span class="text-gray-800">{{ $task->statusAlias() }}</span><br>
                                     </p>
                                 </div>
                             </div>

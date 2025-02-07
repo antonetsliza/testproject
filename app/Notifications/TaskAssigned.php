@@ -40,7 +40,7 @@ class TaskAssigned extends Notification
             ->subject("Task has been assigned to you.")
             ->line(Str::limit($this->task->title, 50) . " task has been assigned to you by"
                 . Str::limit($this->task->owner->name))
-            ->action('Go to the app to check it', url('/'));
+            ->action('Go to the app to check it', url('tasks'));
     }
 
     /**

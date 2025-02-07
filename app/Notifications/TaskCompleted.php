@@ -39,7 +39,7 @@ class TaskCompleted extends Notification
         return (new MailMessage)
             ->subject("Task has been completed.")
             ->line(Str::limit($this->task->title, 50) . " task has been completed.")
-            ->action('Go to the app to check it', url('/'));
+            ->action('Go to the app to check it', url('tasks'));
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TaskStatus;
-use App\Listeners\TaskAssigned;
-use App\Listeners\TaskCompleted;
+use App\Events\TaskAssigned;
+use App\Events\TaskCompleted;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -109,7 +109,7 @@ class TaskController extends Controller
         $task->update($validated);
 
         if($validated['target_id']) {
-            dispatch(new TaskAssigned($task));
+            TaskAssigned::dispatch($task);
         }
 
         return redirect(route('tasks.index'));
@@ -123,7 +123,7 @@ class TaskController extends Controller
 
         $task->update(['status' => TaskStatus::COMPLETED]);
 
-        dispatch(new TaskCompleted($task));
+        TaskCompleted::dispatch($task);
 
         return redirect(route('tasks.index'));
     }

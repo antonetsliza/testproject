@@ -6,6 +6,7 @@ use App\Models\Task;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function PHPUnit\Framework\isInt;
 
 class PermittedEditTask
 {
@@ -23,9 +24,9 @@ class PermittedEditTask
     {
         $task = $request->route('task');
 
-//        dump($request->user()->id);
-//        dump($task->owner_id);
-//        dd($task->target_id);
+        if(!isset($task->id)) {
+            $task = Task::findOrFail($task);
+        }
 
         if($request->user()->id != $task->owner_id
             && $request->user()->id != $task->target_id) {

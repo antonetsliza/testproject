@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TaskStatus;
+use App\Listeners\TaskAssigned;
+use App\Listeners\TaskCompleted;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -18,7 +20,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with('owner')->with('target')->orderBy('due_date')->get();
+        $tasks = Task::with('owner')->with('target')->latest()->paginate(5);
 
         return view('tasks.list', [
             'tasks' => $tasks
@@ -45,8 +47,8 @@ class TaskController extends Controller
     {
         $validated = $request->validated();
         $validated['owner_id'] = Auth::user()->getAuthIdentifier();
-        if(!$validated['target_id'])
-            $validated['target_id'] = null;
+        $validated['target_id'] = null;
+        $validated['status'] = TaskStatus::PENDING;
 
         Task::create($validated);
 
@@ -66,21 +68,18 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //Gate::authorize('update', $task);
-
-        $users = User::query()->select('id', 'name')
-            ->whereNot('id', Auth::user()->getAuthIdentifier())->get();
-
-        $statuses = [
-            TaskStatus::PENDING => 'pending',
-            TaskStatus::IN_PROGRESS => 'in progress',
-            TaskStatus::COMPLETED => 'completed'
-        ];
-
         return view('tasks.edit', [
             'task' => $task,
+        ]);
+    }
+
+    public function assignUserForm(Task $task)
+    {
+        $users = User::query()->select('id', 'name')->get();
+
+        return view('tasks.assign', [
+            'task' => $task,
             'users' => $users,
-            'statuses' => $statuses
         ]);
     }
 
@@ -89,15 +88,42 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //Gate::authorize('update', $task);
-
         $validated = $request->validated();
+
+        $task->update($validated);
+
+        return redirect(route('tasks.index'));
+    }
+
+    public function assignUser(Request $request, Task $task)
+    {
+        $validated = $request->validate([
+            'target_id' => 'numeric',
+        ]);
+
         if(!$validated['target_id'])
             $validated['target_id'] = null;
 
-        //dd($validated);
+        $validated['status'] = !$validated['target_id'] ? TaskStatus::PENDING : TaskStatus::IN_PROGRESS;
 
         $task->update($validated);
+
+        if($validated['target_id']) {
+            dispatch(new TaskAssigned($task));
+        }
+
+        return redirect(route('tasks.index'));
+    }
+
+    public function completeTask(Request $request)
+    {
+        $task_id =  preg_replace('/[^0-9]/', '', $request->route('task'));
+
+        $task = Task::findOrFail($task_id);
+
+        $task->update(['status' => TaskStatus::COMPLETED]);
+
+        dispatch(new TaskCompleted($task));
 
         return redirect(route('tasks.index'));
     }

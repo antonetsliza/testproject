@@ -30,21 +30,6 @@
             />
             <x-input-error :messages="$errors->get('due_date')" class="mt-2 mb-6" />
 
-            <select id="target_id" name="target_id"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mb-4">
-                <option value="0">Assign to...</option>
-                @foreach($users as $user)
-                    <option value="{{$user->id}}" @if($user->id == $task->target_id) selected @endif>{{$user->name}}</option>
-                @endforeach
-            </select>
-
-            <select id="status" name="status"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mb-4">
-                @foreach($statuses as $key => $status)
-                    <option value="{{$key}}" @if($key == $task->status) selected @endif>{{$status}}</option>
-                @endforeach
-            </select>
-
             <x-primary-button class="mt-4 bg-indigo-600">{{ __('Edit') }}</x-primary-button>
         </form>
     </div>

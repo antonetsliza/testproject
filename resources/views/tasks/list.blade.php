@@ -56,14 +56,29 @@
                                             <x-link-button :href="route('tasks.edit', $task)">
                                                 {{ __('Edit') }}
                                             </x-link-button>
-                                            <form method="POST" action="{{ route('tasks.destroy', $task) }}">
-                                                @csrf
-                                                @method('delete')
-                                                <x-link-button :href="route('tasks.destroy', $task)"
-                                                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                                    {{ __('Delete') }}
-                                                </x-link-button>
-                                            </form>
+                                            <x-link-button :href="route('tasks.assign-edit', $task)">
+                                                {{ __('Assign') }}
+                                            </x-link-button>
+
+                                            @if($task->status != 2)
+                                                <form method="POST" action="{{ route('tasks.complete', $task) }}">
+                                                    @csrf
+                                                    @method('patch')
+                                                    <x-link-button :href="route('tasks.complete', $task)"
+                                                                   onclick="event.preventDefault(); this.closest('form').submit();">
+                                                        {{ __('Complete') }}
+                                                    </x-link-button>
+                                                </form>
+                                            @endif
+
+{{--                                            <form method="POST" action="{{ route('tasks.destroy', $task) }}">--}}
+{{--                                                @csrf--}}
+{{--                                                @method('delete')--}}
+{{--                                                <x-link-button :href="route('tasks.destroy', $task)"--}}
+{{--                                                                 onclick="event.preventDefault(); this.closest('form').submit();">--}}
+{{--                                                    {{ __('Delete') }}--}}
+{{--                                                </x-link-button>--}}
+{{--                                            </form>--}}
                                         @endif
                                     </div>
                                     <p class="mt-4 text-lg text-gray-900">
@@ -84,6 +99,9 @@
                         @endforeach
                     </div>
                 </div>
+            </div>
+            <div>
+                {{$tasks->links()}}
             </div>
         </div>
     </div>

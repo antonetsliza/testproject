@@ -23,6 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware(PermittedEditTask::class)->group(function () {
         Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
         Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+
+        Route::patch('/tasks/complete/{task}', [TaskController::class, 'completeTask'])->name('tasks.complete');
+        Route::patch('/tasks/assign/{task}', [TaskController::class, 'assignUser'])->name('tasks.assign-update');
+        Route::get('/tasks/{task}/assign', [TaskController::class, 'assignUserForm'])->name('tasks.assign-edit');
     });
 });
 

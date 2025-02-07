@@ -37,7 +37,7 @@
                                         <div>
                                             <span class="text-gray-800"><b>Created by: </b>{{ $task->owner->name }}</span>
                                             <small
-                                                class="ml-2 text-sm text-gray-600">{{ $task->created_at->format('j M Y') }}</small>
+                                                class="ml-2 text-sm text-gray-600">{{ $task->created_at->format('j M Y H:i') }}</small>
                                             @unless ($task->created_at->eq($task->updated_at))
                                                 <small class="text-sm text-gray-600">
                                                     &middot; {{ __('edited') }}</small>
@@ -86,13 +86,14 @@
                                             $task->due_date = Carbon::parse($task->due_date);
                                         @endphp
                                         <b>Due date:</b>
-                                        <small class="ml-2 text-sm text-gray-600">{{ $task->due_date->format('j M Y') }}</small><br>
+                                        <small class="ml-2 text-sm text-gray-600">{{ $task->due_date->format('j M Y H:i') }}</small><br>
                                         <b>Title:</b>
                                         <span class="text-gray-800">{{ $task->title }}</span><br>
                                         <b>Description:</b><br>
                                         <span class="text-gray-800">{{ $task->description }}</span><br>
                                         <b>Status:</b>
                                         <span class="text-gray-800">{{ $task->statusAlias() }}</span><br>
+                                        @if($task->expired) <span class="bg-red-300">Expired</span> @endif
                                     </p>
                                 </div>
                             </div>

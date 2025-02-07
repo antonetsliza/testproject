@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ExpiredTasks extends Command
@@ -25,6 +27,7 @@ class ExpiredTasks extends Command
      */
     public function handle()
     {
-
+        Task::where('expired', 0)->where('due_date', '<=', Carbon::now())
+            ->update(['expired' => 1]);
     }
 }

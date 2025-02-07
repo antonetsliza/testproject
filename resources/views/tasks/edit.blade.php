@@ -24,8 +24,8 @@
             @php
                 $task->due_date = Carbon::parse($task->due_date);
             @endphp
-            <input name="due_date" id="due_date" type="date" placeholder="Due date"
-                   value="{{old('due_date', $task->due_date->format('Y-m-d'))}}"
+            <input name="due_date" id="due_date" type="datetime-local" placeholder="Due date"
+                   value="{{old('due_date', $task->due_date->format('Y-m-d H:i:s'))}}"
                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mb-4"
             />
             <x-input-error :messages="$errors->get('due_date')" class="mt-2 mb-6" />

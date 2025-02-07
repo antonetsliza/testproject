@@ -25,10 +25,11 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->text(),
-            'due_date' => fake()->dateTimeBetween('now', '+5 days'),
+            'due_date' => fake()->dateTimeBetween('-5days', '+5 days'),
             'status' => Random::generate(1, '0-2'),
             'owner_id' => Random::generate(1, '1-4'),
-            'target_id' => $target_id
+            'target_id' => $target_id,
+            'expired' => 0
         ];
     }
 }

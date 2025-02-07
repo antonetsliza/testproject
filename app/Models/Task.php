@@ -13,7 +13,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'due_date', 'target_id', 'owner_id', 'status'
+        'title', 'description', 'due_date', 'target_id', 'owner_id', 'status', 'expired'
     ];
 
     public function owner(): BelongsTo
